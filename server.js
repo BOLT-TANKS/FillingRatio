@@ -28,7 +28,7 @@ app.post('/send-email', async (req, res) => {
             }
         } catch (contactCheckError) {
             if (contactCheckError.response && contactCheckError.response.status === 404) {
-              console.log("Contact does not exist");
+              console.log("Contact does not exist. 404 received.");
             } else {
               console.error("Error checking for existing contact:", contactCheckError);
               return res.status(500).json({ success: false, message: "Error checking contact existence." });
@@ -49,6 +49,11 @@ app.post('/send-email', async (req, res) => {
             console.log("Existing contact updated");
         } else {
             // Create new contact
+            console.log("Brevo contact creation request body:", {
+                email: brevoData.email,
+                attributes: brevoData.attributes
+            });
+
             await axios.post('https://api.brevo.com/v3/contacts', {
                 email: brevoData.email,
                 attributes: brevoData.attributes
