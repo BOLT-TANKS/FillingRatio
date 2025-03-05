@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: brevo-integration
+    runtime: node
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: BREVO_API_KEY
+      - key: TEMPLATE_ID
