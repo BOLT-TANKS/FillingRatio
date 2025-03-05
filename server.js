@@ -4,12 +4,15 @@ const app = express();
 app.use(express.json());
 
 const brevoApiKey = process.env.BREVO_API_KEY;
-const templateId = process.env.TEMPLATE_ID;
 
 app.post('/send-email', async (req, res) => {
     const brevoData = req.body;
+    const templateId = parseInt(process.env.TEMPLATE_ID);
 
     try {
+        console.log("Received data:", brevoData);
+
+        // Create or update contact
         await axios.post('https://api.brevo.com/v3/contacts', {
             email: brevoData.email,
             attributes: brevoData.attributes
@@ -21,7 +24,11 @@ app.post('/send-email', async (req, res) => {
             }
         });
 
-        await axios.post('https://api.brevo.com/v3/smtp/email', {
+        console.log("Template ID being used:", templateId);
+        console.log("Template ID type:", typeof templateId);
+
+        // Send email using template
+        const emailResponse = await axios.post('https://api.brevo.com/v3/smtp/email', {
             to: [{ email: brevoData.email }],
             templateId: templateId,
             params: brevoData.attributes
@@ -32,6 +39,8 @@ app.post('/send-email', async (req, res) => {
                 'content-type': 'application/json'
             }
         });
+
+        console.log("Email response:", emailResponse.data);
 
         res.json({ success: true, message: 'Email sent and contact saved.' });
     } catch (error) {
