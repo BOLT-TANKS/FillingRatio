@@ -111,6 +111,10 @@ app.post('/send-email', async (req, res) => {
             maxVolume: maxVolume,
             maxMass: maxMass
         });
+
+        // Add logging here:
+        console.log("CORS Headers:", res.getHeaders());
+
     } catch (error) {
         console.error('Brevo API Error:', error.response ? error.response.data : error.message);
         res.status(500).json({ success: false, message: 'Error sending email or saving/updating contact.' });
