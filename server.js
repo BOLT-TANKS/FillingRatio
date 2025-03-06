@@ -1,7 +1,16 @@
 const express = require('express');
 const axios = require('axios');
+const cors = require('cors'); // Import cors
 const app = express();
 app.use(express.json());
+
+// CORS configuration (replace with your webpage domain)
+const corsOptions = {
+    origin: 'https://www.bolt-tanks.com/test-tank-finder', // Replace with your webpage domain
+    optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions)); // Apply CORS middleware
 
 const brevoApiKey = process.env.BREVO_API_KEY;
 
